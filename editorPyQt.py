@@ -47,6 +47,10 @@ class TextEditor(QMainWindow):
         self.exitAction.setShortcut("Ctrl+Q")
         self.exitAction.triggered.connect(self.close)
 
+        self.fontAction = QAction("&Змінити шрифт", self)
+        self.fontAction.setShortcut("Ctrl+F")
+        self.fontAction.riggered.connect(self.changeFont)
+
     def createMenus(self):
         menubar = self.menuBar()
 
@@ -56,12 +60,19 @@ class TextEditor(QMainWindow):
         fileMenu.addAction(self.saveAction)
         fileMenu.addAction(self.exitAction)
 
+        formatMenu = menubar.addMenu("&Формат")
+        formatMenu.addAction(self.fontAction)
+
     def createToolBar(self):
         toolbar = self.addToolBar("Засоби")
 
         toolbar.addAction(self.newAction)
         toolbar.addAction(self.openAction)
         toolbar.addAction(self.saveAction)
+
+        fontButton = QPushButton("Шрифт", self)
+        fontButton.clicked.connect(self.changeFont)
+        toolbar.addWidget(fontButton)
 
     def newFile(self):
         self.textEdit.clear()
