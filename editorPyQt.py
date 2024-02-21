@@ -49,7 +49,13 @@ class TextEditor(QMainWindow):
 
         self.fontAction = QAction("&Змінити шрифт", self)
         self.fontAction.setShortcut("Ctrl+F")
-        self.fontAction.riggered.connect(self.changeFont)
+        self.fontAction.triggered.connect(self.changeFont)
+
+        self.textColorAction = QAction("&Колір тексту", self)
+        self.textColorAction.triggered.connect(self.changeTextColor)
+
+        self.bgColorAction = QAction("&Колір фону", self)
+        self.bgColorAction.triggered.connect(self.changeBgColor)
 
     def createMenus(self):
         menubar = self.menuBar()
@@ -62,6 +68,8 @@ class TextEditor(QMainWindow):
 
         formatMenu = menubar.addMenu("&Формат")
         formatMenu.addAction(self.fontAction)
+        formatMenu.addAction(self.textColorAction)
+        formatMenu.addAction(self.bgColorAction)
 
     def createToolBar(self):
         toolbar = self.addToolBar("Засоби")
@@ -73,6 +81,14 @@ class TextEditor(QMainWindow):
         fontButton = QPushButton("Шрифт", self)
         fontButton.clicked.connect(self.changeFont)
         toolbar.addWidget(fontButton)
+
+        textColorButton = QPushButton("Колір тексту", self)
+        textColorButton.clicked.connect(self.changeTextColor)
+        toolbar.addwidget(textColorButton)
+
+        bgColorButton = QPushButton("Колір фону", self)
+        bgColorButton.clicked.connect(self.changeBgColor)
+        toolbar.addwidget(bgColorButton)
 
     def newFile(self):
         self.textEdit.clear()
@@ -96,6 +112,21 @@ class TextEditor(QMainWindow):
             with open(filename, "w") as file:
                 text = self.textEdit.toPlainText()
                 file.write(text)
+
+    def changeFont(self):
+        font, ok = QFontDialog.getFont()
+        if ok:
+            self.textEdit.setFont(font)
+
+    def changeTextColor(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            self.textEdit.setTextColor(color)
+
+    def changeBgcolor(self):
+        color = QColorDialog.getcolor()
+        if color.isValid():
+            self.textEdit.setStyleSheet("background-color: {}" - format(color.name()))
 
 
 if __name__ == "__main__":
